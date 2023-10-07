@@ -1,46 +1,30 @@
-﻿#include <iostream>
-#include <windows.h>
-#include <string>
-#include <filesystem>
-#include <vector>
-#include <functional>
+#include "Header.h"
 
-typedef double (*PluginFunction)(double);
+class Calculator {
+public:
+    double Calculate(const std::string& expression) {
+        return 0;
+    }
+};
 
-// Здесь будет ваш парсер выражений и обработка базовых математических операций
-double EvaluateExpression(const std::string& expression) {
-    // TODO: Реализуйте логику вычисления выражений здесь
-    return 0.0; // Примерное значение
-}
+class ConsoleReader {
+public:
+    std::string ReadExpression() {
+        std::string expression;
+        std::cout << "Введите выражение: ";
+        std::getline(std::cin, expression);
+        return expression;
+    }
+};
 
 int main() {
-    std::string expression;
-    std::cout << "Введите выражение: ";
-    std::getline(std::cin, expression);
+    setlocale(LC_ALL, "ru");
+    ConsoleReader reader;
+    Calculator calculator;
 
-    double result = EvaluateExpression(expression);
-
-    // Загрузка плагинов
-    std::vector<HMODULE> loadedModules;
-    for (const auto& entry : std::filesystem::directory_iterator("./plugins")) {
-        if (entry.path().extension() == ".dll") {
-            HMODULE module = LoadLibrary(entry.path().c_str());
-            if (module) {
-                PluginFunction pluginFunc = (PluginFunction)GetProcAddress(module, "Execute");
-                if (pluginFunc) {
-                    result = pluginFunc(result); // Применяем функцию плагина к результату
-                }
-                loadedModules.push_back(module); // Сохраняем для последующего освобождения
-            }
-        }
-    }
-
+    std::string expression = reader.ReadExpression();
+    double result = calculator.Calculate(expression);
     std::cout << "Результат: " << result << std::endl;
-
-    // Освобождаем загруженные модули
-    for (HMODULE module : loadedModules) {
-        FreeLibrary(module);
-    }
 
     return 0;
 }
