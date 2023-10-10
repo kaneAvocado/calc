@@ -130,10 +130,15 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="calc.cpp" />
+    <ClCompile Include="Calculator.cpp" />
+    <ClCompile Include="ConsoleReader.cpp" />
     <ClCompile Include="LoadPluginscpp.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Header.h" />
+    <ClInclude Include="Calculator.h" />
+    <ClInclude Include="ConsoleReader.h" />
+    <ClInclude Include="PluginInterface.h" />
+    <ClInclude Include="LoadPluginscpp.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
