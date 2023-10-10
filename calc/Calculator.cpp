@@ -24,10 +24,20 @@ double Calculator::Calculate(const std::string& expression) {
 
     if (expression.find("(") != std::string::npos && expression.find(")") != std::string::npos) {
         std::string funcName = expression.substr(0, expression.find("("));
-        double value = std::stod(expression.substr(expression.find("(") + 1, expression.find(")") - expression.find("(") - 1));
+
+        std::string argsString = expression.substr(expression.find("(") + 1, expression.find(")") - expression.find("(") - 1);
+        std::vector<double> args;
+
+        size_t startPos = 0;
+        size_t commaPos;
+        while ((commaPos = argsString.find(",", startPos)) != std::string::npos) {
+            args.push_back(std::stod(argsString.substr(startPos, commaPos - startPos)));
+            startPos = commaPos + 1;
+        }
+        args.push_back(std::stod(argsString.substr(startPos))); // Add the last argument
 
         if (plugins.find(funcName) != plugins.end()) {
-            return plugins[funcName]->Execute(value);
+            return plugins[funcName]->Execute(args);
         }
         else {
             throw std::runtime_error("Unsupported function: " + funcName);
